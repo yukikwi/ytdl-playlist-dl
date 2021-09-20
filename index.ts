@@ -4,12 +4,14 @@
 */
 
 // Load dependency
-const fs = require('fs');
-const ytdl = require('ytdl-core');
-const { YoutubePlaylist } = require('./class/playlist.youtube')
+import fs from 'fs'
+import YoutubePlaylist from './class/playlist.youtube'
+import DLitem from './class/interface/item.dlqueue'
+import YtdlDl from './class/dl.ytdl'
 
 // Initial readline
-const readline = require('readline').createInterface({
+import RL from 'readline'
+const readline = RL.createInterface({
     input: process.stdin,
     output: process.stdout
 });
@@ -24,19 +26,30 @@ readline.question('Enter playlist url (youtube)?', async (url:String) => {
         console.log('Recived total '+playlist.length+' videos')
 
         // Create download target folder
-        const target = './output/' + ytpl.getPlId()
-        if (!fs.existsSync(target)){
-            fs.mkdirSync(target);
+        const target = '/output/' + ytpl.getPlId()
+        if (!fs.existsSync('.'+target)){
+            fs.mkdirSync('.'+target);
+        }
+        if (!fs.existsSync('./tmp/audio'+target)){
+            fs.mkdirSync('./tmp/audio'+target);
+        }
+        if (!fs.existsSync('./tmp/video'+target)){
+            fs.mkdirSync('./tmp/video'+target);
         }
 
         // Loop download
+        let Dlqueue:Array<DLitem> = []
         for(let i = 0; i < playlist.length; i++) {
             console.log('Add '+playlist[i].snippet.title+' to queue')
-            await (ytdl('http://www.youtube.com/watch?v='+playlist[i].contentDetails.videoId, {
-                quality: 'highest'
-            }))
-            .pipe(fs.createWriteStream(target +'/'+ playlist[i].snippet.title+'.mp4'));
+            Dlqueue.push({
+                videoName: target +'/'+ playlist[i].snippet.title+'.mp4',
+                videoUrl: 'http://www.youtube.com/watch?v='+playlist[i].contentDetails.videoId
+            })
         }
+
+        console.log('Start downloading...')
+        new YtdlDl(Dlqueue)
+
     }
     catch(e){
         console.log('Error: ' + e)

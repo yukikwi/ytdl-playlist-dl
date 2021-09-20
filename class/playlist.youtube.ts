@@ -3,10 +3,10 @@
     version: 1.0.0
 */
 import { YoutubePlaylistInterface } from './interface/playlist.youtube'
-const axios = require('axios');
+import axios from 'axios'
 require('dotenv').config()
 
-export class YoutubePlaylist implements YoutubePlaylistInterface {
+export default class YoutubePlaylist implements YoutubePlaylistInterface {
     private playlist_id:String = '' // Playlist id
 
     constructor (url:String) {
