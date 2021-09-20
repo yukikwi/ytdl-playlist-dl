@@ -8,5 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "youtube-playlist": "^1.0.4",
+    "ytdl-core": "^4.9.1"
+  }
 }
