@@ -10,6 +10,7 @@ export default class YoutubePlaylist implements YoutubePlaylistInterface {
     private playlist_id:String = '' // Playlist id
 
     constructor (url:String) {
+        // split list id from url
         let temp_ytpl_id = url.match(/[&?]list=([^&/]+)/i)
         if(temp_ytpl_id && temp_ytpl_id?.length >= 1)
             this.playlist_id = temp_ytpl_id[1]
@@ -20,6 +21,7 @@ export default class YoutubePlaylist implements YoutubePlaylistInterface {
     }
 
     async getItem () {
+        // Get video using official api
         const data = await axios.get('https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=50&playlistId='+ this.playlist_id +'&key='+process.env.YT_API,
         {
             headers: {

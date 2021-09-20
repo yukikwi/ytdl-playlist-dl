@@ -40,6 +40,7 @@ readline.question('Enter playlist url (youtube)?', async (url:String) => {
         // Loop download
         let Dlqueue:Array<DLitem> = []
         for(let i = 0; i < playlist.length; i++) {
+            // Push video to queue
             console.log('Add '+playlist[i].snippet.title+' to queue')
             Dlqueue.push({
                 videoName: target +'/'+ playlist[i].snippet.title+'.mp4',

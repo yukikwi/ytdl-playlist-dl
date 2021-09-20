@@ -26,7 +26,6 @@ export default class YtdlDl {
                     status = status + 1
                     console.log('Video saved')
                     this.isBothend(status, data?.videoName)
-                    //this.worker()
                 })
 
                 // Download Audio
@@ -39,7 +38,6 @@ export default class YtdlDl {
                     status = status + 1
                     console.log('Audio saved')
                     this.isBothend(status, data?.videoName)
-                    //this.worker()
                 })
             }
             else
@@ -50,8 +48,10 @@ export default class YtdlDl {
     }
 
     isBothend(status:Number, file:string){
+        // If both end.
         if(status === 2){
             this.ffmpegMerge(file)
+            // Run next queue
             this.worker()
         }
         else
