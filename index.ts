@@ -28,13 +28,13 @@ readline.question('Enter playlist url (youtube)?', async (url:String) => {
         // Create download target folder
         const target = '/output/' + await ytpl.getPlaylistTitle()
         if (!fs.existsSync('.'+target)){
-            fs.mkdirSync('.'+target);
+            fs.mkdirSync('.'+target, { recursive: true });
         }
         if (!fs.existsSync('./tmp/audio'+target)){
-            fs.mkdirSync('./tmp/audio'+target);
+            fs.mkdirSync('./tmp/audio'+target, { recursive: true });
         }
         if (!fs.existsSync('./tmp/video'+target)){
-            fs.mkdirSync('./tmp/video'+target);
+            fs.mkdirSync('./tmp/video'+target, { recursive: true });
         }
 
         // Loop download
