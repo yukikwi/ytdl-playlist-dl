@@ -30,4 +30,15 @@ export default class YoutubePlaylist implements YoutubePlaylistInterface {
         })
         return data.data.items
     }
+
+    async getPlaylistTitle () {
+        // Get playlist title using official api
+        const data = await axios.get('https://www.googleapis.com/youtube/v3/playlists?part=snippet&id='+ this.playlist_id +'&key='+process.env.YT_API,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        return data.data.items[0].snippet.title
+    }
 }

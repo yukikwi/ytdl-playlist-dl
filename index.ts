@@ -26,7 +26,7 @@ readline.question('Enter playlist url (youtube)?', async (url:String) => {
         console.log('Recived total '+playlist.length+' videos')
 
         // Create download target folder
-        const target = '/output/' + ytpl.getPlId()
+        const target = '/output/' + await ytpl.getPlaylistTitle()
         if (!fs.existsSync('.'+target)){
             fs.mkdirSync('.'+target);
         }

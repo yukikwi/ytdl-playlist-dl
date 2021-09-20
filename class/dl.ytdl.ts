@@ -20,7 +20,11 @@ export default class YtdlDl {
                 const downloadVideo = ytdl(data?.videoUrl, {
                     quality: 'highestvideo'
                 })
+
                 downloadVideo.pipe(fs.createWriteStream('./tmp/video/'+data?.videoName));
+                downloadVideo.once('response', () => {
+                    console.log('Start download video')
+                });
 
                 downloadVideo.on('end', () => {
                     status = status + 1
@@ -33,7 +37,9 @@ export default class YtdlDl {
                     quality: 'highestaudio'
                 })
                 downloadAudio.pipe(fs.createWriteStream('./tmp/audio/'+data?.videoName));
-
+                downloadAudio.once('response', () => {
+                    console.log('Start download audio')
+                });
                 downloadAudio.on('end', () => {
                     status = status + 1
                     console.log('Audio saved')
@@ -59,10 +65,11 @@ export default class YtdlDl {
     }
 
     ffmpegMerge (file:string) {
+        console.log('Convert...')
         const pathToFfmpeg = require('ffmpeg-static');
         const { exec } = require("child_process");
 
-        exec(pathToFfmpeg+" -i './tmp/video"+ file +"' -i './tmp/audio"+ file +"' '."+file+"' ", (error:string, stdout:string, stderr:string) => {
+        exec(pathToFfmpeg+" -y -i './tmp/video"+ file +"' -i './tmp/audio"+ file +"' '."+file+"' ", (error:string, stdout:string, stderr:string) => {
             if (error) {
                 console.log(`error: ${error}`);
                 return;
@@ -72,6 +79,9 @@ export default class YtdlDl {
                 return;
             }
             console.log(`stdout: ${stdout}`);
+            // Remove tmp file
+            fs.unlinkSync('./tmp/audio/'+file);
+            fs.unlinkSync('./tmp/video/'+file);
         });
     }
 }
